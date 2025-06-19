@@ -11,18 +11,18 @@
  * @returns and object including the name of the provider, the monthly cost, the total messages per month, the data size in GB
  */
 
-function calculateAWSCostLayer1(
+function calculateAWSCostDataAcquisition(
   numberOfDevices,
   deviceSendingIntervalInMinutes,
   averageSizeOfMessageInKb
 ) {
-  const layer1Pricing = pricing.aws.iotCore;
-  const tier1Limit = layer1Pricing.pricing_tiers.tier1.limit;
-  const tier2Limit = layer1Pricing.pricing_tiers.tier2.limit;
-  const tier3Limit = layer1Pricing.pricing_tiers.tier3.limit;
-  const priceTier1 = layer1Pricing.pricing_tiers.tier1.price;
-  const priceTier2 = layer1Pricing.pricing_tiers.tier2.price;
-  const priceTier3 = layer1Pricing.pricing_tiers.tier3.price;
+  const layerPricing = pricing.aws.iotCore;
+  const tier1Limit = layerPricing.pricing_tiers.tier1.limit;
+  const tier2Limit = layerPricing.pricing_tiers.tier2.limit;
+  const tier3Limit = layerPricing.pricing_tiers.tier3.limit;
+  const priceTier1 = layerPricing.pricing_tiers.tier1.price;
+  const priceTier2 = layerPricing.pricing_tiers.tier2.price;
+  const priceTier3 = layerPricing.pricing_tiers.tier3.price;
 
   const totalMessagesPerMonth = Math.ceil(
     numberOfDevices * (1 / deviceSendingIntervalInMinutes) * 60 * 24 * 30
@@ -39,8 +39,8 @@ function calculateAWSCostLayer1(
 
   let remainingMessages = totalMessagesPerMonthAWS;
   let monthlyCost =
-    numberOfDevices * layer1Pricing.pricePerDeviceAndMonth +
-    2 * numberOfRulesTriggered * layer1Pricing.priceRulesTriggered;
+    numberOfDevices * layerPricing.pricePerDeviceAndMonth +
+    2 * numberOfRulesTriggered * layerPricing.priceRulesTriggered;
 
   // Tiered Pricing
   if (remainingMessages > tier1Limit) {
@@ -87,12 +87,12 @@ function calculateAWSCostLayer1(
  * @param {number} averageSizeOfMessageInKb
  * @returns and object including the name of the provider, the monthly cost, the total messages per month, the data size in GB
  */
-function calculateAzureCostLayer1(
+function calculateAzureCostDataAcquisition(
   numberOfDevices,
   deviceSendingIntervalInMinutes,
   averageSizeOfMessageInKb
 ) {
-  let layer1Pricing = pricing.azure.iotHub;
+  let layerPricing = pricing.azure.iotHub;
   let monthlyCost;
   let monthlyAzurePrice;
   let azureThresholdMonthly;
@@ -109,17 +109,17 @@ function calculateAzureCostLayer1(
       ? totalMessagesPerMonth * Math.ceil(averageSizeOfMessageInKb / 4)
       : totalMessagesPerMonth;
 
-  if (totalMessagesPerMonthAzure <= layer1Pricing.pricing_tiers.tier1.limit) {
-    azureThresholdMonthly = layer1Pricing.pricing_tiers.tier1.threshold;
-    monthlyAzurePrice = layer1Pricing.pricing_tiers.tier1.price;
+  if (totalMessagesPerMonthAzure <= layerPricing.pricing_tiers.tier1.limit) {
+    azureThresholdMonthly = layerPricing.pricing_tiers.tier1.threshold;
+    monthlyAzurePrice = layerPricing.pricing_tiers.tier1.price;
   } else if (
-    totalMessagesPerMonthAzure <= layer1Pricing.pricing_tiers.tier2.limit
+    totalMessagesPerMonthAzure <= layerPricing.pricing_tiers.tier2.limit
   ) {
-    azureThresholdMonthly = layer1Pricing.pricing_tiers.tier2.threshold;
-    monthlyAzurePrice = layer1Pricing.pricing_tiers.tier2.price;
+    azureThresholdMonthly = layerPricing.pricing_tiers.tier2.threshold;
+    monthlyAzurePrice = layerPricing.pricing_tiers.tier2.price;
   } else {
-    azureThresholdMonthly = layer1Pricing.pricing_tiers.tier3.threshold;
-    monthlyAzurePrice = layer1Pricing.pricing_tiers.tier3.price;
+    azureThresholdMonthly = layerPricing.pricing_tiers.tier3.threshold;
+    monthlyAzurePrice = layerPricing.pricing_tiers.tier3.price;
   }
 
   if (totalMessagesPerMonthAzure > azureThresholdMonthly) {

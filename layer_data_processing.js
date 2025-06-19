@@ -10,7 +10,7 @@
  * @param {} averageSizeOfMessageInKb
  * @returns an object including the provider used, the total monthly costs, the data size in GB and the total messages sent per month
  */
-function calculateAWSCostLayer2(
+function calculateAWSCostDataProcessing(
   numberOfDevices,
   deviceSendingIntervalInMinutes,
   averageSizeOfMessageInKb
@@ -58,12 +58,12 @@ function calculateAWSCostLayer2(
  * @returns
  */
 
-function calculateAzureCostLayer2(
+function calculateAzureCostDataProcessing(
   numberOfDevices,
   deviceSendingIntervalInMinutes,
   averageSizeOfMessageInKb
 ) {
-  let result = calculateAWSCostLayer2(
+  let result = calculateAWSCostDataProcessing(
     numberOfDevices,
     deviceSendingIntervalInMinutes,
     averageSizeOfMessageInKb

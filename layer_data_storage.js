@@ -79,25 +79,24 @@ function calculateCosmosDBCost(
   let requestUnitsNeeded = pricing.azure.cosmosDB.minimumRequestUnits; // minimum of request units that CosmosDB offers
   let writesPerSecond = totalMessagesPerMonth / (30 * 24 * 60 * 60);
   let readsPerSecond = writesPerSecond;
-  let multiplierForMessageSize = 1.0; // we use this in order to estimate the costs when the RUs increase since the scaling on Azure calculator is not understandable and these values are giving results very close to the calculator
+  const multiplierForMessageSize = 1.0 + (averageSizeOfMessageInKb - 1) * 0.05; // we use this in order to estimate the costs when the RUs increase since the scaling on Azure calculator is not understandable and these values are giving results very close to the calculator
 
   let RUsPerWrite = pricing.azure.cosmosDB.RUsPerWrite;
   let RUsPerRead = pricing.azure.cosmosDB.RUsPerRead;
 
-  let totalWriteRUs = writesPerSecond * RUsPerWrite;
+  let totalWriteRUs = writesPerSecond * RUsPerWrite * multiplierForMessageSize; // depending on message
   let totalReadRUs = readsPerSecond * RUsPerRead;
 
   if (Math.ceil(totalWriteRUs + totalReadRUs) > requestUnitsNeeded) {
     requestUnitsNeeded = Math.ceil(totalWriteRUs + totalReadRUs);
-    multiplierForMessageSize += (averageSizeOfMessageInKb - 1) * 0.05;
   }
 
   let storagePrice = pricing.azure.cosmosDB.storagePrice;
   let requestPrice = pricing.azure.cosmosDB.requestPrice;
 
   let totalMonthlyCost =
-    730 * requestUnitsNeeded * requestPrice * multiplierForMessageSize +
-    storageNeededForDuration * storagePrice; // 730 hours in a month
+    requestUnitsNeeded * requestPrice +
+    storageNeededForDuration * storagePrice; 
   return {
     provider: "Azure",
     totalMonthlyCost: totalMonthlyCost,
