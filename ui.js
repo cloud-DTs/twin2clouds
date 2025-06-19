@@ -22,9 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const archiveSlider = document.getElementById(
     "archiveStorageDurationInMonths"
   );
+  const dashboardActiveHoursPerDaySlider = document.getElementById("dashboardActiveHoursPerDay");
   updateSliderStyle(hotSlider);
   updateSliderStyle(coolSlider);
   updateSliderStyle(archiveSlider);
+  updateSliderStyle(dashboardActiveHoursPerDaySlider); 
 });
 
 function fillScenario(
@@ -37,7 +39,9 @@ function fillScenario(
   needs3DModel,
   numberOfEntities,
   amountOfActiveEditors,
-  amountOfActiveViewers
+  amountOfActiveViewers, 
+  dashboardRefreshesPerHour, 
+  dashboardActiveHoursPerDay
 ) {
   document.getElementById("devices").value = devices;
   document.getElementById("interval").value = interval;
@@ -62,10 +66,15 @@ function fillScenario(
 
   document.getElementById("entityCount").value = numberOfEntities;
 
+  document.getElementById("dashboardRefreshesPerHour").value = dashboardRefreshesPerHour; 
+  document.getElementById("dashboardActiveHoursPerDay").value = dashboardActiveHoursPerDay; 
+
+
   // Update slider UI
   updateSliderStyle(document.getElementById("hotStorageDurationInMonths"));
   updateSliderStyle(document.getElementById("coolStorageDurationInMonths"));
   updateSliderStyle(document.getElementById("archiveStorageDurationInMonths"));
+  updateSliderStyle(document.getElementById("dashboardActiveHoursPerDay"));
 }
 
 function flipCard(card) {

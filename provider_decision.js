@@ -29,39 +29,39 @@ function buildGraphForStorage(
   transferCosts
 ) {
   let graph = {
-    L3_AWS_Hot: {
+    AWS_Hot: {
       costs: awsHot.totalMonthlyCost,
       edges: {
-        L3_AWS_Cool: transferCosts.L3_AWS_Hot_to_L3_AWS_Cool,
-        L3_Azure_Cool: transferCosts.L3_AWS_Hot_to_L3_Azure_Cool,
+        AWS_Cool: transferCosts.AWS_Hot_to_AWS_Cool,
+        Azure_Cool: transferCosts.AWS_Hot_to_Azure_Cool,
       },
     },
-    L3_Azure_Hot: {
+    Azure_Hot: {
       costs: azureHot.totalMonthlyCost,
       edges: {
-        L3_AWS_Cool: transferCosts.L3_Azure_Hot_to_L3_AWS_Cool,
-        L3_Azure_Cool: transferCosts.L3_Azure_Hot_to_L3_Azure_Cool,
+        AWS_Cool: transferCosts.Azure_Hot_to_AWS_Cool,
+        Azure_Cool: transferCosts.Azure_Hot_to_Azure_Cool,
       },
     },
-    L3_AWS_Cool: {
+    AWS_Cool: {
       costs: awsCool.totalMonthlyCost,
       edges: {
-        L3_AWS_Archive: transferCosts.L3_AWS_Cool_to_L3_AWS_Archive,
-        L3_Azure_Archive: transferCosts.L3_AWS_Cool_to_L3_Azure_Archive,
+        AWS_Archive: transferCosts.AWS_Cool_to_AWS_Archive,
+        Azure_Archive: transferCosts.AWS_Cool_to_Azure_Archive,
       },
     },
-    L3_Azure_Cool: {
+    Azure_Cool: {
       costs: azureCool.totalMonthlyCost,
       edges: {
-        L3_AWS_Archive: transferCosts.L3_Azure_Cool_to_L3_AWS_Archive,
-        L3_Azure_Archive: transferCosts.L3_Azure_Cool_to_L3_Azure_Archive,
+        AWS_Archive: transferCosts.Azure_Cool_to_AWS_Archive,
+        Azure_Archive: transferCosts.Azure_Cool_to_Azure_Archive,
       },
     },
-    L3_AWS_Archive: {
+    AWS_Archive: {
       costs: awsArchive.totalMonthlyCost,
       edges: {},
     },
-    L3_Azure_Archive: {
+    Azure_Archive: {
       costs: azureArchive.totalMonthlyCost,
       edges: {},
     },
